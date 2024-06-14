@@ -1,0 +1,79 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui;
+}
+
+@mixin position($pos) {
+    @if $pos == top-left {
+        top: 0;
+        left: 0;
+    }
+    @if $pos == top-right {
+        top: 0;
+        right: 0;
+    }
+    @if $pos == bottom-left {
+        bottom: 0;
+        left: 0;
+    }
+    @if $pos == bottom-right {
+        bottom: 0;
+        right: 0;
+    }
+}
+@mixin grid($column, $spacing) {
+    --column: #{$column};
+    --spacing: #{$spacing};
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing);
+    margin-right: calc(-1 * var(--spacing));
+    > * {
+        width: calc(100% / var(--column) - var(--spacing));
+        background: olivedrab;
+    }
+}
+.list {
+    @include grid(4, 30px);
+
+    @include screen(tablet) {
+        --column: 2;
+        --spacing: 20px;
+    }
+
+    @include screen(mobile) {
+        --column: 1;
+        --spacing: 10px;
+    }
+}
+
+.container {
+    position: relative;
+    height: 400px;
+    background: #ccc;
+    .item {
+        @include position(bottom-right);
+
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: olivedrab;
+    }
+}
+@mixin screen($device) {
+    @if $device == tablet {
+        @media (max-width: 991.98px) {
+            @content;
+        }
+    }
+    @if $device == mobile {
+        @media (max-width: 575px) {
+            @content;
+        }
+    }
+}
